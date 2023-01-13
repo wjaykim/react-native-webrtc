@@ -388,7 +388,8 @@ RCT_EXPORT_METHOD(mediaStreamTrackSetVolume : (nonnull NSNumber *)pcId : (nonnul
     }
 }
 
-- (void)setVideoEffects:(nonnull NSString *)trackID names:(nonnull NSArray<NSString *> *)names {
+RCT_EXPORT_METHOD(mediaStreamTrackSetVideoEffects:(nonnull NSString *)trackID names:(nonnull NSArray<NSString *> *)names)
+{
   RTCMediaStreamTrack *track = self.localTracks[trackID];
   if (track) {
     RTCVideoTrack *videoTrack = (RTCVideoTrack *)track;
@@ -410,18 +411,6 @@ RCT_EXPORT_METHOD(mediaStreamTrackSetVolume : (nonnull NSNumber *)pcId : (nonnul
     
     capturer.delegate = self.videoEffectProcessor;
   }
-}
-
-RCT_EXPORT_METHOD(mediaStreamTrackSetVideoEffects:(nonnull NSString *)trackID names:(nonnull NSArray<NSString *> *)names)
-{
-  [self setVideoEffects:trackID names:names];
-}
-
-RCT_EXPORT_METHOD(mediaStreamTrackSetVideoEffect:(nonnull NSString *)trackID name:(nonnull NSString *)name)
-{
-  NSMutableArray *names = [[NSMutableArray alloc] init];
-  [names addObject:name];
-  [self setVideoEffects:trackID names:names];
 }
 
 #pragma mark - Helpers
