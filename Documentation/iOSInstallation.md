@@ -8,7 +8,7 @@ See a sample app in the `examples/GumTestApp` directory.
 
 **IMPORTANT:** Make sure you are using CocoaPods 1.10 or higher.  
 You may have to change the `platform` field in your podfile.  
-`react-native-webrtc` doesn't support iOS < 12 
+`@livekit/react-native-webrtc` doesn't support iOS < 12 
 Set it to '12.0' or above or you'll get an error when running `pod install`.
 
 ```
@@ -24,6 +24,33 @@ Navigate to `<ProjectFolder>/ios/<ProjectName>/` and edit `Info.plist`, add the 
 <string>Camera permission description</string>
 <key>NSMicrophoneUsageDescription</key>
 <string>Microphone permission description</string>
+```
+
+## CallKit
+
+If your app uses a CallKit integration to handle incoming calls, then your
+CXProviderDelegate should call through to `RTCAudioSession.sharedInstance.audioSessionDidActivate/Deactivate` accordingly.
+
+```
+#import <WebRTC/RTCAudioSession.h>
+
+- (void) provider:(CXProvider *) provider didActivateAudioSession:(AVAudioSession *) audioSession {
+    [[RTCAudioSession sharedInstance] audioSessionDidActivate:[AVAudioSession sharedInstance]];
+}
+
+- (void) provider:(CXProvider *) provider didDeactivateAudioSession:(AVAudioSession *) audioSession {
+    [[RTCAudioSession sharedInstance] audioSessionDidDeactivate:[AVAudioSession sharedInstance]];
+}
+```
+
+Javascript methods are also provided to call these methods:
+
+```
+import { RTCAudioSession } from '@livekit/react-native-webrtc'
+
+// Call as needed.
+RTCAudioSession.audioSessionDidActivate();
+RTCAudioSession.audioSessionDidDeactivate();
 ```
 
 ## Library not loaded/Code signature invalid
